@@ -19,6 +19,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -205,6 +206,8 @@ public class MainActivity extends Activity {
      */
     public void onClickRegisterButton(View view) {
         Log.d(TAG, "Beginning API registration process...");
+        
+        boolean hasError = false;
 
         buttonRegister = (Button) findViewById(R.id.button_register);
 
@@ -218,6 +221,17 @@ public class MainActivity extends Activity {
         // Lets pull out details from the form fields.
         EditText apiTokenEditText = (EditText) findViewById(R.id.edit_text_api_token);
         String apiToken = apiTokenEditText.getText().toString();
+        
+        if (TextUtils.isEmpty(editTextApiHost.getText())) {
+			editTextApiHost.setError("Host should not be empty.");
+			hasError = true;
+		}
+
+		if (hasError) {
+			Log.e(TAG, "Missing required params");
+			buttonRegister.setEnabled(true);
+			return;
+		}
 
         String apiHostString = editTextApiHost.getText().toString();
         String apiPortString = editTextApiPort.getText().toString();
