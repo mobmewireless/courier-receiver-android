@@ -43,7 +43,6 @@ public class MainActivity extends Activity {
     private String[] hostAndPort = {};
     private EditText editTextApiHost;
     private EditText editTextApiPort;
-    private Button buttonRegister;
     private SharedPreferences defaultPreferences;
 
     @Override
@@ -206,32 +205,29 @@ public class MainActivity extends Activity {
      */
     public void onClickRegisterButton(View view) {
         Log.d(TAG, "Beginning API registration process...");
-        
-        boolean hasError = false;
-
-        buttonRegister = (Button) findViewById(R.id.button_register);
 
         // Hide the keyboard.
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 
-        // Disable the register button.
-        buttonRegister.setEnabled(false);
-
         // Lets pull out details from the form fields.
         EditText apiTokenEditText = (EditText) findViewById(R.id.edit_text_api_token);
         String apiToken = apiTokenEditText.getText().toString();
-        
-        if (TextUtils.isEmpty(editTextApiHost.getText())) {
-			editTextApiHost.setError("Host should not be empty.");
-			hasError = true;
-		}
 
-		if (hasError) {
-			Log.e(TAG, "Missing required params");
-			buttonRegister.setEnabled(true);
-			return;
-		}
+        boolean hasError = false;
+
+        if (TextUtils.isEmpty(editTextApiHost.getText())) {
+            editTextApiHost.setError("Host should not be empty.");
+            hasError = true;
+        }
+
+        if (hasError) {
+            Log.e(TAG, "Missing required params");
+            return;
+        }
+
+        // Disable the register button.
+        findViewById(R.id.button_register).setEnabled(false);
 
         String apiHostString = editTextApiHost.getText().toString();
         String apiPortString = editTextApiPort.getText().toString();
